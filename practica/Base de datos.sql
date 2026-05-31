@@ -1,0 +1,33 @@
+CREATE TABLE GroupName (
+    Name VARCHAR(50) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE Students (
+    CountNumber  INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+    SemesterNumber INT NOT NULL,
+    GroupName VARCHAR(50) NOT NULL,
+    FOREIGN KEY (GroupName) REFERENCES GroupName(Name)
+
+);
+
+CREATE TABLE Professor(
+    WorkerNumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Signature (
+    Name VARCHAR(50) NOT NULL PRIMARY KEY,
+    ProfessorWN INT NOT NULL,
+    FOREIGN KEY (ProfessorWN) REFERENCES Professor(WorkerNumber)
+);
+
+CREATE TABLE Classroom(
+    Number INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Type VARCHAR(30) NOT NULL,
+    Location VARCHAR(20) NOT NULL,
+    GroupName VARCHAR(50) NOT NULL,
+    FOREIGN KEY (GroupName) REFERENCES GroupName(Name)
+);
