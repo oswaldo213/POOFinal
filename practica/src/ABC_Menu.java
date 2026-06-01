@@ -5,23 +5,45 @@ import javax.swing.*;
 
 public class ABC_Menu extends JFrame implements ActionListener {
 
-    JFrame Menu = new JFrame();
     JMenuBar menubar = new JMenuBar();
     JMenu subMenu = new JMenu("Menu");
+    JMenu About = new JMenu("About");
+
     JMenuItem professor = new JMenuItem("Professors");
+    JMenuItem students = new JMenuItem("Students");
+    JMenuItem Areas = new JMenuItem("Areas");
+    JMenuItem Group = new JMenuItem("Grups");
+    JMenuItem classroom = new JMenuItem("Classroom");
+    JMenuItem exit = new JMenuItem("Exit");
 
     Connection con;
 
     public ABC_Menu() {
         subMenu.add(professor);
+        subMenu.add(students);
+        subMenu.add(Areas);
+        subMenu.add(Group);
+        subMenu.add(classroom);
+        subMenu.add(exit);
+
+        professor.addActionListener(this);
+        students.addActionListener(this);
+        Areas.addActionListener(this);
+        Group.addActionListener(this);
+        classroom.addActionListener(this);
+        exit.addActionListener(this);
+
         menubar.add(subMenu);
-        Menu.setSize(600, 300);
-        Menu.setVisible(true);
-        Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        menubar.add(About);
 
-        Menu.setJMenuBar(menubar);
+        setSize(600, 300);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Principal Menu");
 
-        Menu.setLayout(null);
+        setJMenuBar(menubar);
+
+        setLayout(null);
         popo();
     }
 
@@ -40,7 +62,11 @@ public class ABC_Menu extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == exit) {
+            System.exit(0);
+        }
         if (e.getSource() == professor) {
+            this.setVisible(false);
         }
     }
 }
