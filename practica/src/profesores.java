@@ -80,7 +80,7 @@ public class profesores extends JFrame implements ActionListener {
 
         setSize(600, 300);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setTitle("Principal Menu");
     }
 
