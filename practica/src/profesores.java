@@ -102,6 +102,7 @@ public class profesores extends JFrame implements ActionListener {
         String nombre = txtNombre.getText();
         String apellido = txtApellido.getText();
         String numero = txtNumero.getText();
+        String tabla = "Professor";
 
         if (e.getSource() == exit) {
             this.dispose();
@@ -111,7 +112,9 @@ public class profesores extends JFrame implements ActionListener {
         if (e.getSource() == btnSave) {
             try {
                 String query =
-                    "INSERT INTO Professor (FirstName, LastName, WorkerNumber) VALUES ('" +
+                    "INSERT INTO " +
+                    tabla +
+                    " (FirstName, LastName, WorkerNumber) VALUES ('" +
                     nombre +
                     "','" +
                     apellido +
@@ -136,7 +139,9 @@ public class profesores extends JFrame implements ActionListener {
         if (e.getSource() == btnRemove) {
             try {
                 String Query =
-                    "DELETE from Professor where WorkerNumber = '" +
+                    "DELETE from " +
+                    tabla +
+                    " where WorkerNumber = '" +
                     numero +
                     "'";
                 Statement stmt = con.createStatement();
@@ -156,7 +161,9 @@ public class profesores extends JFrame implements ActionListener {
         if (e.getSource() == btnUpdate) {
             try {
                 String Query =
-                    "UPDATE Professor SET FirstName ='" +
+                    "UPDATE " +
+                    tabla +
+                    " SET FirstName ='" +
                     nombre +
                     "',LastName ='" +
                     apellido +
@@ -180,7 +187,9 @@ public class profesores extends JFrame implements ActionListener {
         if (e.getSource() == btnQuery) {
             try {
                 String Query =
-                    "SELECT * from Professor where WorkerNumber = '" +
+                    "SELECT * from " +
+                    tabla +
+                    " where WorkerNumber = '" +
                     numero +
                     "'";
                 Statement stmt = con.createStatement();
