@@ -16,7 +16,7 @@ public class profesores extends JFrame implements ActionListener {
     JTextField txtNumero = new JTextField();
 
     JButton btnSave = new JButton("Guardar");
-    JButton btnRemove = new JButton("Cancelar");
+    JButton btnRemove = new JButton("Eliminar");
     JButton btnUpdate = new JButton("Actualizar");
     JButton btnQuery = new JButton("Consultar");
 
@@ -84,14 +84,6 @@ public class profesores extends JFrame implements ActionListener {
         setTitle("Principal Menu");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == exit) {
-            this.dispose();
-            anterior.setVisible(true);
-        }
-    }
-
     public void popo() {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -105,28 +97,102 @@ public class profesores extends JFrame implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnSave) {
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String numero = txtNumero.getText();
+        String nombre = txtNombre.getText();
+        String apellido = txtApellido.getText();
+        String numero = txtNumero.getText();
 
+        if (e.getSource() == exit) {
+            this.dispose();
+            anterior.setVisible(true);
+        }
+
+        if (e.getSource() == btnSave) {
             try {
                 String query =
-                    "INSERT INTO Professor (FirstName, LastName, WorkerNumber) VALUES (?, ?, ?)";
-                PreparedStatement pst = con.prepareStatement(query);
-                pst.setString(1, nombre);
-                pst.setString(2, apellido);
-                pst.setString(3, numero);
-                pst.executeUpdate();
+                    "INSERT INTO Professor (FirstName, LastName, WorkerNumber) VALUES ('" +
+                    nombre +
+                    "','" +
+                    apellido +
+                    "','" +
+                    numero +
+                    "')";
+
+                Statement stmt = con.createStatement();
+                int rowsEffected = stmt.executeUpdate(query);
                 JOptionPane.showMessageDialog(
                     null,
-                    "Datos guardados correctamente"
+                    rowsEffected + "rows effected"
                 );
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(
                     null,
                     "Error al guardar datos: " + ex.getMessage()
+                );
+            }
+        }
+
+        if (e.getSource() == btnRemove) {
+            try {
+                String Query =
+                    "DELETE from Professor where WorkerNumber = '" +
+                    numero +
+                    "'";
+                Statement stmt = con.createStatement();
+                int rowsEffected = stmt.executeUpdate(Query);
+                JOptionPane.showMessageDialog(
+                    null,
+                    rowsEffected + "rows effected"
+                );
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "error al eliminar los datos" + ex.getMessage()
+                );
+            }
+        }
+
+        if (e.getSource() == btnUpdate) {
+            try {
+                String Query =
+                    "UPDATE Professor SET FirstName ='" +
+                    nombre +
+                    "',LastName ='" +
+                    apellido +
+                    "' where WorkerNumber = '" +
+                    numero +
+                    "'";
+                Statement stmt = con.createStatement();
+                int rowsEffected = stmt.executeUpdate(Query);
+                JOptionPane.showMessageDialog(
+                    null,
+                    rowsEffected + "Exito en la modificacion"
+                );
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "error al modificar los datos" + ex.getMessage()
+                );
+            }
+        }
+
+        if (e.getSource() == btnQuery) {
+            try {
+                String Query =
+                    "SELECT * from Professor where WorkerNumber = '" +
+                    numero +
+                    "'";
+                Statement stmt = con.createStatement();
+                ResultSet res = stmt.executeQuery(Query);
+                res.next();
+
+                txtNombre.setText(res.getString("FirstName"));
+                txtApellido.setText(res.getString("LastName"));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "error al consultar los datos" + ex.getMessage()
                 );
             }
         }
