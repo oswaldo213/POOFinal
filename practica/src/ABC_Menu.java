@@ -12,7 +12,7 @@ public class ABC_Menu extends JFrame implements ActionListener {
     JMenuItem professor = new JMenuItem("Professors");
     JMenuItem students = new JMenuItem("Students");
     JMenuItem Areas = new JMenuItem("Areas");
-    JMenuItem Group = new JMenuItem("Grups");
+    JMenuItem Group = new JMenuItem("Groups");
     JMenuItem classroom = new JMenuItem("Classroom");
     JMenuItem exit = new JMenuItem("Exit");
 
@@ -58,7 +58,11 @@ public class ABC_Menu extends JFrame implements ActionListener {
             p.setVisible(true);
             this.setVisible(false);
         }
+
+        if (e.getSource() == students) {
+            Alumnos a = new Alumnos(this);
+            a.setVisible(true);
+            this.setVisible(false);
+        }
     }
 }
-//javac -cp "lib/*" -d bin src/*.java
-//java -cp "lib/*:bin" Main

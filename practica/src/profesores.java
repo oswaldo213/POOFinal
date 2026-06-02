@@ -5,20 +5,28 @@ import javax.swing.*;
 
 public class profesores extends JFrame implements ActionListener {
 
-    Connection con;
-    JFrame anterior;
-    JMenuBar menubar = new JMenuBar();
-    JMenu subMenu = new JMenu("Menu");
-    JMenuItem exit = new JMenuItem("Exit");
+    protected Connection con;
+    protected String tabla = "Professor";
 
-    JTextField txtNombre = new JTextField();
-    JTextField txtApellido = new JTextField();
-    JTextField txtNumero = new JTextField();
+    protected JFrame anterior;
 
-    JButton btnSave = new JButton("Guardar");
-    JButton btnRemove = new JButton("Eliminar");
-    JButton btnUpdate = new JButton("Actualizar");
-    JButton btnQuery = new JButton("Consultar");
+    protected JPanel panel_up = new JPanel();
+    protected JPanel panel_down = new JPanel();
+
+    protected Container c = new Container();
+
+    protected JMenuBar menubar = new JMenuBar();
+    protected JMenu subMenu = new JMenu("Menu");
+    protected JMenuItem exit = new JMenuItem("Exit");
+
+    protected JTextField txtNombre = new JTextField();
+    protected JTextField txtApellido = new JTextField();
+    protected JTextField txtNumero = new JTextField();
+
+    protected JButton btnSave = new JButton("Guardar");
+    protected JButton btnRemove = new JButton("Eliminar");
+    protected JButton btnUpdate = new JButton("Actualizar");
+    protected JButton btnQuery = new JButton("Consultar");
 
     public profesores(JFrame anterior) {
         this.anterior = anterior;
@@ -27,33 +35,20 @@ public class profesores extends JFrame implements ActionListener {
     }
 
     public void Window() {
-        Container c = getContentPane();
-        JPanel panel_up = new JPanel();
-        JPanel panel_down = new JPanel();
+        c = getContentPane();
+        c.setLayout(new BorderLayout(10, 10));
 
         subMenu.add(exit);
         exit.addActionListener(this);
         menubar.add(subMenu);
         setJMenuBar(menubar);
 
+        panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
+        panel_up.setBorder(BorderFactory.createEmptyBorder(20, 40, 10, 40));
+
         JLabel lblNombre = new JLabel("Nombre:");
         JLabel lblApellido = new JLabel("Apellido:");
-        JLabel lblNumero = new JLabel("Número:");
-
-        txtNombre.setBounds(100, 50, 200, 30);
-        txtApellido.setBounds(100, 100, 200, 30);
-        txtNumero.setBounds(100, 150, 200, 30);
-
-        btnSave.setBounds(100, 200, 100, 30);
-        btnRemove.setBounds(200, 200, 100, 30);
-        btnUpdate.setBounds(300, 200, 100, 30);
-        btnQuery.setBounds(400, 200, 100, 30);
-
-        BorderLayout bl = new BorderLayout();
-        c.setLayout(bl);
-
-        GridLayout gl = new GridLayout(3, 3);
-        panel_up.setLayout(gl);
+        JLabel lblNumero = new JLabel("Número de trabajador:");
 
         panel_up.add(lblNombre);
         panel_up.add(txtNombre);
@@ -62,8 +57,8 @@ public class profesores extends JFrame implements ActionListener {
         panel_up.add(lblNumero);
         panel_up.add(txtNumero);
 
-        FlowLayout fl = new FlowLayout();
-        panel_down.setLayout(fl);
+        panel_down.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        panel_down.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
         btnSave.addActionListener(this);
         btnRemove.addActionListener(this);
@@ -75,13 +70,14 @@ public class profesores extends JFrame implements ActionListener {
         panel_down.add(btnUpdate);
         panel_down.add(btnQuery);
 
-        c.add(panel_up, BorderLayout.NORTH);
+        c.add(panel_up, BorderLayout.CENTER);
         c.add(panel_down, BorderLayout.SOUTH);
 
-        setSize(600, 300);
+        setSize(500, 250);
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setTitle("Principal Menu");
+        setTitle("Gestión de Profesores");
     }
 
     public void popo() {
@@ -97,13 +93,51 @@ public class profesores extends JFrame implements ActionListener {
         }
     }
 
+    public String MakeQuery(int valor) {
+        switch (valor) {
+            case 1:
+                return "SELECT * FROM " + tabla;
+            case 2:
+                return (
+                    "INSERT INTO " +
+                    tabla +
+                    " (FirstName, LastName, WorkerNumber) VALUES ('" +
+                    txtNombre.getText() +
+                    "','" +
+                    txtApellido.getText() +
+                    "','" +
+                    txtNumero.getText() +
+                    "')"
+                );
+            case 3:
+                return (
+                    "UPDATE " +
+                    tabla +
+                    " SET FirstName = '" +
+                    txtNombre.getText() +
+                    "', LastName = '" +
+                    txtApellido.getText() +
+                    "', WorkerNumber = '" +
+                    txtNumero.getText() +
+                    "' WHERE WorkerNumber = '" +
+                    txtNumero.getText() +
+                    "'"
+                );
+            case 4:
+                return (
+                    "DELETE FROM " +
+                    tabla +
+                    " WHERE WorkerNumber = '" +
+                    txtNumero.getText() +
+                    "'"
+                );
+            default:
+                return "";
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        String nombre = txtNombre.getText();
-        String apellido = txtApellido.getText();
-        String numero = txtNumero.getText();
-        String tabla = "Professor";
-
         if (e.getSource() == exit) {
             this.dispose();
             anterior.setVisible(true);
@@ -111,17 +145,7 @@ public class profesores extends JFrame implements ActionListener {
 
         if (e.getSource() == btnSave) {
             try {
-                String query =
-                    "INSERT INTO " +
-                    tabla +
-                    " (FirstName, LastName, WorkerNumber) VALUES ('" +
-                    nombre +
-                    "','" +
-                    apellido +
-                    "','" +
-                    numero +
-                    "')";
-
+                String query = MakeQuery(2);
                 Statement stmt = con.createStatement();
                 int rowsEffected = stmt.executeUpdate(query);
                 JOptionPane.showMessageDialog(
@@ -138,14 +162,9 @@ public class profesores extends JFrame implements ActionListener {
 
         if (e.getSource() == btnRemove) {
             try {
-                String Query =
-                    "DELETE from " +
-                    tabla +
-                    " where WorkerNumber = '" +
-                    numero +
-                    "'";
+                String query = MakeQuery(4);
                 Statement stmt = con.createStatement();
-                int rowsEffected = stmt.executeUpdate(Query);
+                int rowsEffected = stmt.executeUpdate(query);
                 JOptionPane.showMessageDialog(
                     null,
                     rowsEffected + "rows effected"
@@ -160,18 +179,9 @@ public class profesores extends JFrame implements ActionListener {
 
         if (e.getSource() == btnUpdate) {
             try {
-                String Query =
-                    "UPDATE " +
-                    tabla +
-                    " SET FirstName ='" +
-                    nombre +
-                    "',LastName ='" +
-                    apellido +
-                    "' where WorkerNumber = '" +
-                    numero +
-                    "'";
+                String query = MakeQuery(3);
                 Statement stmt = con.createStatement();
-                int rowsEffected = stmt.executeUpdate(Query);
+                int rowsEffected = stmt.executeUpdate(query);
                 JOptionPane.showMessageDialog(
                     null,
                     rowsEffected + "Exito en la modificacion"
@@ -186,14 +196,9 @@ public class profesores extends JFrame implements ActionListener {
 
         if (e.getSource() == btnQuery) {
             try {
-                String Query =
-                    "SELECT * from " +
-                    tabla +
-                    " where WorkerNumber = '" +
-                    numero +
-                    "'";
+                String query = MakeQuery(1);
                 Statement stmt = con.createStatement();
-                ResultSet res = stmt.executeQuery(Query);
+                ResultSet res = stmt.executeQuery(query);
                 res.next();
 
                 txtNombre.setText(res.getString("FirstName"));

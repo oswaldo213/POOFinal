@@ -31,3 +31,9 @@ CREATE TABLE Classroom(
     GroupName VARCHAR(50) NOT NULL,
     FOREIGN KEY (GroupName) REFERENCES GroupName(Name)
 );
+
+CREATE TABLE Admin (
+    AdminID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Passphrase VARCHAR(50) NOT NULL
+);
