@@ -1,14 +1,13 @@
-import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
-public class aulas extends profesores {
+public class aulas extends ABC_Base {
 
     private JTextField txtLocation;
 
     public aulas(JFrame anterior) {
         super(anterior);
+        tabla = "Classroom";
     }
 
     @Override
@@ -18,12 +17,12 @@ public class aulas extends profesores {
 
         JLabel lblLocation = new JLabel("Ubicación:");
         txtLocation = new JTextField();
-        lblNombre = new JLabel("Nombre de aula:");
-        lblApellido = new JLabel("Type:");
+        lbl1Field = new JLabel("Nombre de aula:");
+        lbl2Field = new JLabel("Tipo:");
 
         super.Window();
-        panel_up.remove(lblNumero);
-        panel_up.remove(txtNumero);
+        panel_up.remove(lbl1Field);
+        panel_up.remove(txt3Field);
 
         panel_up.add(lblLocation);
         panel_up.add(txtLocation);
@@ -41,7 +40,7 @@ public class aulas extends profesores {
                     "SELECT * FROM " +
                     tabla +
                     " WHERE Name = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "'"
                 );
             case 2:
@@ -49,11 +48,11 @@ public class aulas extends profesores {
                     "INSERT INTO " +
                     tabla +
                     " (Type, Location, Name) VALUES ('" +
-                    txtApellido.getText() +
+                    txt2Field.getText() +
                     "','" +
                     txtLocation.getText() +
                     "','" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "')"
                 );
             case 3:
@@ -61,11 +60,11 @@ public class aulas extends profesores {
                     "UPDATE " +
                     tabla +
                     " SET Type = '" +
-                    txtApellido.getText() +
+                    txt2Field.getText() +
                     "', Location = '" +
                     txtLocation.getText() +
                     "' WHERE Name = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "'"
                 );
             case 4:
@@ -73,7 +72,7 @@ public class aulas extends profesores {
                     "DELETE FROM " +
                     tabla +
                     " WHERE Name = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "'"
                 );
             default:
@@ -82,27 +81,23 @@ public class aulas extends profesores {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        this.tabla = "Classroom";
-
-        if (e.getSource() == btnQuery) {
-            String query = MakeQuery(1);
-            try {
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                rs.next();
-                txtNombre.setText(rs.getString("Name"));
-                txtApellido.setText(rs.getString("Type"));
+    public void Consultar() {
+        String query = MakeQuery(1);
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                txt1Field.setText(rs.getString("Name"));
+                txt2Field.setText(rs.getString("Type"));
                 txtLocation.setText(rs.getString("Location"));
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error al consultar datos: " + ex.getMessage()
-                );
+            } else {
+                JOptionPane.showMessageDialog(null, "Aula no encontrada.");
             }
-            return;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Error al consultar datos: " + ex.getMessage()
+            );
         }
-
-        super.actionPerformed(e);
     }
 }

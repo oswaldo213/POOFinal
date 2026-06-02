@@ -1,12 +1,12 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.lang.annotation.ElementType;
 import java.sql.*;
 import javax.swing.*;
 
-public class Grupos extends profesores {
+public class Grupos extends ABC_Base {
 
     public Grupos(JFrame anterior) {
         super(anterior);
+        tabla = "GroupName";
     }
 
     @Override
@@ -14,14 +14,15 @@ public class Grupos extends profesores {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
         panel_up.add(Box.createVerticalStrut(10));
 
-        lblNombre = new JLabel("Nombre de grupo:");
-        txtNombre = new JTextField();
-        lblApellido = new JLabel("Semestre:");
-        txtApellido = new JTextField();
-        lblNumero = new JLabel("Numero de aula");
-        txtNumero = new JTextField();
+        lbl1Field = new JLabel("Nombre de grupo:");
+        txt1Field = new JTextField();
+        lbl2Field = new JLabel("Semestre:");
+        txt2Field = new JTextField();
+        lbl3Field = new JLabel("Numero de aula");
+        txt3Field = new JTextField();
 
         super.Window();
+        setTitle("Gestión de Grupos");
     }
 
     @Override
@@ -32,9 +33,9 @@ public class Grupos extends profesores {
                     "SELECT GroupName.Name, GroupName.Semester, c.Name AS ClassroomName " +
                     "FROM " +
                     tabla +
-                    " JOIN Classroom c ON GroupName.ClassroomID = c.ClassroomID" +
-                    " WHERE GroupName.Name = '" +
-                    txtNombre.getText() +
+                    " JOIN Classroom c ON GroupName.ClassroomID = c.ClassroomID " +
+                    "WHERE GroupName.Name = '" +
+                    txt1Field.getText() +
                     "'"
                 );
             case 2:
@@ -42,29 +43,26 @@ public class Grupos extends profesores {
                     "INSERT INTO " +
                     tabla +
                     " (Name, Semester, ClassroomID) VALUES ('" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "','" +
-                    txtApellido.getText() +
+                    txt2Field.getText() +
                     "'," +
                     "(SELECT ClassroomID FROM Classroom WHERE Name = '" +
-                    txtNumero.getText() +
-                    "')" +
-                    ")"
+                    txt3Field.getText() +
+                    "'))"
                 );
             case 3:
                 return (
                     "UPDATE " +
                     tabla +
-                    " SET Name = '" +
-                    txtNombre.getText() +
-                    "', Semester = '" +
-                    txtApellido.getText() +
-                    "', ClassroomID = " +
-                    "(SELECT ClassroomID FROM Classroom WHERE Name = '" +
-                    txtNumero.getText() +
-                    "')" +
-                    " WHERE Name = '" +
-                    txtNombre.getText() +
+                    " SET Semester = '" +
+                    txt2Field.getText() +
+                    "', " +
+                    "ClassroomID = (SELECT ClassroomID FROM Classroom WHERE Name = '" +
+                    txt3Field.getText() +
+                    "') " +
+                    "WHERE Name = '" +
+                    txt1Field.getText() +
                     "'"
                 );
             case 4:
@@ -72,7 +70,7 @@ public class Grupos extends profesores {
                     "DELETE FROM " +
                     tabla +
                     " WHERE Name = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "'"
                 );
             default:
@@ -81,25 +79,23 @@ public class Grupos extends profesores {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        this.tabla = "GroupName";
-
-        if (e.getSource() == btnQuery) {
-            String query = MakeQuery(1);
-            try {
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                rs.next();
-                txtApellido.setText(rs.getString("Semester"));
-                txtNumero.setText(rs.getString("ClassroomName"));
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error al consultar datos: " + ex.getMessage()
-                );
+    public void Consultar() {
+        String query = MakeQuery(1);
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                txt1Field.setText(rs.getString("Name"));
+                txt2Field.setText(rs.getString("Semester"));
+                txt3Field.setText(rs.getString("ClassroomName"));
+            } else {
+                JOptionPane.showMessageDialog(null, "Grupo no encontrado.");
             }
-            return;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Error al consultar datos: " + ex.getMessage()
+            );
         }
-        super.actionPerformed(e);
     }
 }

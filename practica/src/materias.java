@@ -1,5 +1,3 @@
-import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
@@ -7,82 +5,68 @@ public class materias extends profesores {
 
     public materias(JFrame anterior) {
         super(anterior);
+        tabla = "Signature";
     }
 
     @Override
     public void Window() {
-        c = getContentPane();
-        c.setLayout(new BorderLayout(10, 10));
-
-        subMenu.add(exit);
-        exit.addActionListener(this);
-        menubar.add(subMenu);
-        setJMenuBar(menubar);
-
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
-        panel_up.setBorder(BorderFactory.createEmptyBorder(20, 40, 10, 40));
+        panel_up.add(Box.createVerticalStrut(10));
 
-        lblNombre = new JLabel("Nombre de materia:");
-        lblNumero = new JLabel("Profesor de la materia:");
+        lbl1Field.setText("Nombre de materia:");
+        lbl3Field.setText("Profesor de la materia:");
 
-        panel_up.add(lblNombre);
-        panel_up.add(txtNombre);
-        panel_up.add(lblNumero);
-        panel_up.add(txtNumero);
+        super.Window();
 
-        panel_down.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        panel_down.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        panel_up.remove(lbl2Field);
+        panel_up.remove(txt2Field);
 
-        btnSave.addActionListener(this);
-        btnRemove.addActionListener(this);
-        btnUpdate.addActionListener(this);
-        btnQuery.addActionListener(this);
-
-        panel_down.add(btnSave);
-        panel_down.add(btnRemove);
-        panel_down.add(btnUpdate);
-        panel_down.add(btnQuery);
-
-        c.add(panel_up, BorderLayout.CENTER);
-        c.add(panel_down, BorderLayout.SOUTH);
-
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setTitle("Gestión de Grupos");
+        setTitle("Gestión de Materias");
+        panel_up.revalidate();
+        panel_up.repaint();
     }
 
     @Override
     public String MakeQuery(int valor) {
         switch (valor) {
             case 1:
-                return ("SELECT * FROM " + tabla);
+                return (
+                    "SELECT s.Name, CONCAT(p.FirstName, ' ', p.LastName) AS NombreProfesor " +
+                    "FROM Signature s " +
+                    "LEFT JOIN Professor p ON s.WorkerNumber = p.WorkerNumber " +
+                    "WHERE s.Name = '" +
+                    txt1Field.getText() +
+                    "'"
+                );
             case 2:
                 return (
                     "INSERT INTO " +
                     tabla +
-                    " (Name, ProfessorWN) VALUES ('" +
-                    txtNombre.getText() +
+                    " (Name, WorkerNumber) VALUES ('" +
+                    txt1Field.getText() +
                     "', " +
-                    txtNumero.getText() +
-                    ")"
+                    "(SELECT WorkerNumber FROM Professor WHERE CONCAT(FirstName, ' ', LastName) = '" +
+                    txt3Field.getText() +
+                    "'))"
+                );
+            case 3:
+                return (
+                    "UPDATE " +
+                    tabla +
+                    " SET WorkerNumber = " +
+                    "(SELECT WorkerNumber FROM Professor WHERE CONCAT(FirstName, ' ', LastName) = '" +
+                    txt3Field.getText() +
+                    "') " +
+                    "WHERE Name = '" +
+                    txt1Field.getText() +
+                    "'"
                 );
             case 4:
                 return (
                     "DELETE FROM " +
                     tabla +
                     " WHERE Name = '" +
-                    txtNombre.getText() +
-                    "'"
-                );
-            case 3:
-                return (
-                    "UPDATE " +
-                    tabla +
-                    " SET ProfessorWN = " +
-                    txtNumero.getText() +
-                    " WHERE Name = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "'"
                 );
             default:
@@ -91,25 +75,27 @@ public class materias extends profesores {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        this.tabla = "Signature";
-
-        if (e.getSource() == btnQuery) {
-            String query = MakeQuery(1);
-            try {
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                rs.next();
-                txtNombre.setText(rs.getString("Name"));
-                txtNumero.setText(rs.getString("ProfessorWN"));
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error al consultar: " + ex.getMessage()
-                );
+    public void Consultar() {
+        String query = MakeQuery(1);
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                txt1Field.setText(rs.getString("Name"));
+                String proFe = rs.getString("NombreProfesor");
+                if (proFe != null) {
+                    txt3Field.setText(proFe);
+                } else {
+                    txt3Field.setText("Sin profesor asignado");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Materia no encontrada.");
             }
-            return;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Error al consultar: " + ex.getMessage()
+            );
         }
-        super.actionPerformed(e);
     }
 }

@@ -1,82 +1,11 @@
-import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
-public class profesores extends JFrame implements ActionListener {
-
-    protected static Connection con;
-    protected String tabla = "Professor";
-
-    protected JFrame anterior;
-
-    protected JPanel panel_up = new JPanel();
-    protected JPanel panel_down = new JPanel();
-
-    protected Container c = new Container();
-
-    protected JMenuBar menubar = new JMenuBar();
-    protected JMenu subMenu = new JMenu("Menu");
-    protected JMenuItem exit = new JMenuItem("Exit");
-
-    protected JTextField txtNombre = new JTextField();
-    protected JTextField txtApellido = new JTextField();
-    protected JTextField txtNumero = new JTextField();
-
-    protected JButton btnSave = new JButton("Guardar");
-    protected JButton btnRemove = new JButton("Eliminar");
-    protected JButton btnUpdate = new JButton("Actualizar");
-    protected JButton btnQuery = new JButton("Consultar");
-
-    protected JLabel lblNombre = new JLabel("Nombre:");
-    protected JLabel lblApellido = new JLabel("Apellido:");
-    protected JLabel lblNumero = new JLabel("Número de trabajador:");
+public class profesores extends ABC_Base {
 
     public profesores(JFrame anterior) {
-        this.anterior = anterior;
-        Window();
-    }
-
-    public void Window() {
-        c = getContentPane();
-        c.setLayout(new BorderLayout(10, 10));
-
-        subMenu.add(exit);
-        exit.addActionListener(this);
-        menubar.add(subMenu);
-        setJMenuBar(menubar);
-
-        panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
-        panel_up.setBorder(BorderFactory.createEmptyBorder(20, 40, 10, 40));
-
-        panel_up.add(lblNombre);
-        panel_up.add(txtNombre);
-        panel_up.add(lblApellido);
-        panel_up.add(txtApellido);
-        panel_up.add(lblNumero);
-        panel_up.add(txtNumero);
-
-        panel_down.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        panel_down.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-
-        btnSave.addActionListener(this);
-        btnRemove.addActionListener(this);
-        btnUpdate.addActionListener(this);
-        btnQuery.addActionListener(this);
-
-        panel_down.add(btnSave);
-        panel_down.add(btnRemove);
-        panel_down.add(btnUpdate);
-        panel_down.add(btnQuery);
-
-        c.add(panel_up, BorderLayout.CENTER);
-        c.add(panel_down, BorderLayout.SOUTH);
-
-        setSize(700, 550);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setTitle("Gestión de Profesores");
+        super(anterior);
+        tabla = "Professor";
     }
 
     public void popo() {
@@ -101,11 +30,11 @@ public class profesores extends JFrame implements ActionListener {
                     "INSERT INTO " +
                     tabla +
                     " (FirstName, LastName, WorkerNumber) VALUES ('" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "','" +
-                    txtApellido.getText() +
+                    txt2Field.getText() +
                     "','" +
-                    txtNumero.getText() +
+                    txt3Field.getText() +
                     "')"
                 );
             case 3:
@@ -113,13 +42,13 @@ public class profesores extends JFrame implements ActionListener {
                     "UPDATE " +
                     tabla +
                     " SET FirstName = '" +
-                    txtNombre.getText() +
+                    txt1Field.getText() +
                     "', LastName = '" +
-                    txtApellido.getText() +
+                    txt2Field.getText() +
                     "', WorkerNumber = '" +
-                    txtNumero.getText() +
+                    txt3Field.getText() +
                     "' WHERE WorkerNumber = '" +
-                    txtNumero.getText() +
+                    txt3Field.getText() +
                     "'"
                 );
             case 4:
@@ -127,7 +56,7 @@ public class profesores extends JFrame implements ActionListener {
                     "DELETE FROM " +
                     tabla +
                     " WHERE WorkerNumber = '" +
-                    txtNumero.getText() +
+                    txt3Field.getText() +
                     "'"
                 );
             default:
@@ -136,78 +65,21 @@ public class profesores extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == exit) {
-            this.dispose();
-            anterior.setVisible(true);
-        }
-
-        if (e.getSource() == btnSave) {
-            try {
-                String query = MakeQuery(2);
-                Statement stmt = con.createStatement();
-                int rowsEffected = stmt.executeUpdate(query);
-                JOptionPane.showMessageDialog(
-                    null,
-                    rowsEffected + "rows effected"
-                );
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error al guardar datos: " + ex.getMessage()
-                );
+    public void Consultar() {
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(MakeQuery(1));
+            if (rs.next()) {
+                txt1Field.setText(rs.getString("FirstName"));
+                txt2Field.setText(rs.getString("LastName"));
+            } else {
+                JOptionPane.showMessageDialog(null, "Profesor no encontrado.");
             }
-        }
-
-        if (e.getSource() == btnRemove) {
-            try {
-                String query = MakeQuery(4);
-                Statement stmt = con.createStatement();
-                int rowsEffected = stmt.executeUpdate(query);
-                JOptionPane.showMessageDialog(
-                    null,
-                    rowsEffected + "rows effected"
-                );
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "error al eliminar los datos" + ex.getMessage()
-                );
-            }
-        }
-
-        if (e.getSource() == btnUpdate) {
-            try {
-                String query = MakeQuery(3);
-                Statement stmt = con.createStatement();
-                int rowsEffected = stmt.executeUpdate(query);
-                JOptionPane.showMessageDialog(
-                    null,
-                    rowsEffected + "Exito en la modificacion"
-                );
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "error al modificar los datos" + ex.getMessage()
-                );
-            }
-        }
-
-        if (e.getSource() == btnQuery) {
-            try {
-                String query = MakeQuery(1);
-                Statement stmt = con.createStatement();
-                ResultSet res = stmt.executeQuery(query);
-                res.next();
-
-                txtNombre.setText(res.getString("FirstName"));
-                txtApellido.setText(res.getString("LastName"));
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "error al consultar los datos" + ex.getMessage()
-                );
-            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Error al consultar: " + ex.getMessage()
+            );
         }
     }
 }
