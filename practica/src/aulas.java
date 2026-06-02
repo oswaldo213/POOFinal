@@ -15,19 +15,25 @@ public class aulas extends ABC_Base {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
         panel_up.add(Box.createVerticalStrut(10));
 
-        JLabel lblLocation = new JLabel("Ubicación:");
-        txtLocation = new JTextField();
         lbl1Field = new JLabel("Nombre de aula:");
-        lbl2Field = new JLabel("Tipo:");
+        panel_up.add(lbl1Field);
+        panel_up.add(txt1Field);
 
-        super.Window();
-        panel_up.remove(lbl1Field);
-        panel_up.remove(txt3Field);
+        lbl2Field = new JLabel("Tipo de aula:");
+        panel_up.add(lbl2Field);
+        panel_up.add(txt2Field);
 
+        JLabel lblLocation = new JLabel("Ubicación / Edificio:");
+        txtLocation = new JTextField();
         panel_up.add(lblLocation);
         panel_up.add(txtLocation);
 
-        setTitle("Gestión de aulas");
+        super.Window();
+
+        panel_up.remove(lbl3Field);
+        panel_up.remove(txt3Field);
+
+        setTitle("Gestión de Aulas");
         panel_up.revalidate();
         panel_up.repaint();
     }

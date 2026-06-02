@@ -38,7 +38,8 @@ public class ABC_Menu extends JFrame implements ActionListener {
         menubar.add(subMenu);
         menubar.add(About);
 
-        setSize(600, 300);
+        setSize(700, 400);
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Principal Menu");
