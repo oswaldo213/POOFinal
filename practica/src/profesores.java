@@ -8,6 +8,11 @@ public class profesores extends ABC_Base {
         tabla = "Professor";
     }
 
+    public profesores() {
+        super();
+        tabla = "Professor";
+    }
+
     public void popo() {
         try {
             Class.forName("org.mariadb.jdbc.Driver");

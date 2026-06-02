@@ -10,6 +10,11 @@ public class aulas extends ABC_Base {
         tabla = "Classroom";
     }
 
+    public aulas() {
+        super();
+        tabla = "Classroom";
+    }
+
     @Override
     public void Window() {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));

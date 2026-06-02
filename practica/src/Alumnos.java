@@ -10,6 +10,11 @@ public class Alumnos extends ABC_Base {
         tabla = "Students";
     }
 
+    public Alumnos() {
+        super();
+        tabla = "Students";
+    }
+
     @Override
     public void Window() {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));

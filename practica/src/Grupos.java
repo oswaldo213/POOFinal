@@ -1,4 +1,3 @@
-import java.lang.annotation.ElementType;
 import java.sql.*;
 import javax.swing.*;
 
@@ -6,6 +5,11 @@ public class Grupos extends ABC_Base {
 
     public Grupos(JFrame anterior) {
         super(anterior);
+        tabla = "GroupName";
+    }
+
+    public Grupos() {
+        super();
         tabla = "GroupName";
     }
 

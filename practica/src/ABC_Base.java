@@ -35,6 +35,11 @@ public abstract class ABC_Base extends JFrame implements ActionListener {
         Window();
     }
 
+    public ABC_Base() {
+        Window();
+        this.anterior = null;
+    }
+
     protected static void conectar() {
         try {
             Class.forName("org.mariadb.jdbc.Driver");

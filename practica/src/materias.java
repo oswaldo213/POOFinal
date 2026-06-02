@@ -8,6 +8,11 @@ public class materias extends profesores {
         tabla = "Signature";
     }
 
+    public materias() {
+        super();
+        tabla = "Signature";
+    }
+
     @Override
     public void Window() {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
