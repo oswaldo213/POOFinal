@@ -5,7 +5,6 @@ import javax.swing.*;
 
 public class Alumnos extends profesores {
 
-    private JTextField txtSemester;
     private JTextField txtGroupName;
 
     public Alumnos(JFrame anterior) {
@@ -17,21 +16,16 @@ public class Alumnos extends profesores {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
 
         panel_up.add(Box.createVerticalStrut(10));
-        JLabel lblSemester = new JLabel("Semestre:");
         JLabel lblGroupName = new JLabel("Grupo:");
 
-        txtSemester = new JTextField();
         txtGroupName = new JTextField();
         lblNumero = new JLabel("Cuenta de alumno:");
         super.Window();
 
-        panel_up.add(lblSemester);
-        panel_up.add(txtSemester);
         panel_up.add(lblGroupName);
         panel_up.add(txtGroupName);
 
         setTitle("Gestión de Alumnos");
-        setSize(700, 550);
         panel_up.revalidate();
         panel_up.repaint();
     }
@@ -45,14 +39,12 @@ public class Alumnos extends profesores {
                 return (
                     "INSERT INTO " +
                     tabla +
-                    " (FirstName, LastName, CountNumber, SemesterNumber, GroupName) VALUES ('" +
+                    " (FirstName, LastName, CountNumber, GroupName) VALUES ('" +
                     txtNombre.getText() +
                     "','" +
                     txtApellido.getText() +
                     "','" +
                     txtNumero.getText() +
-                    "','" +
-                    txtSemester.getText() +
                     "','" +
                     txtGroupName.getText() +
                     "')"
@@ -65,8 +57,6 @@ public class Alumnos extends profesores {
                     txtNombre.getText() +
                     "', LastName = '" +
                     txtApellido.getText() +
-                    "', SemesterNumber = '" +
-                    txtSemester.getText() +
                     "', GroupName = '" +
                     txtGroupName.getText() +
                     "' WHERE CountNumber = '" +
@@ -99,7 +89,6 @@ public class Alumnos extends profesores {
 
                 txtNombre.setText(res.getString("FirstName"));
                 txtApellido.setText(res.getString("LastName"));
-                txtSemester.setText(res.getString("SemesterNumber"));
                 txtGroupName.setText(res.getString("GroupName"));
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(

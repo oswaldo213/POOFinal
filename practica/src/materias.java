@@ -46,7 +46,6 @@ public class materias extends profesores {
         c.add(panel_up, BorderLayout.CENTER);
         c.add(panel_down, BorderLayout.SOUTH);
 
-        setSize(500, 250);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

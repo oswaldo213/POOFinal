@@ -1,39 +1,41 @@
+CREATE TABLE Classroom (
+    ClassroomID INT AUTO_INCREMENT PRIMARY KEY,
+    Name        VARCHAR(50) NOT NULL UNIQUE,
+    Type        VARCHAR(50),
+    Location    VARCHAR(100)
+);
+
 CREATE TABLE GroupName (
-    Name VARCHAR(50) NOT NULL PRIMARY KEY
+    GroupNameID INT AUTO_INCREMENT PRIMARY KEY,
+    Name        VARCHAR(50) UNIQUE NOT NULL,
+    Semester    INT NOT NULL,
+    ClassroomID INT,
+    FOREIGN KEY (ClassroomID) REFERENCES Classroom(ClassroomID) ON UPDATE CASCADE
+);
+
+CREATE TABLE Professor (
+    WorkerNumber VARCHAR(20) PRIMARY KEY,
+    FirstName    VARCHAR(50) NOT NULL,
+    LastName     VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Students (
-    CountNumber  INT NOT NULL PRIMARY KEY  AUTO_INCREMENT,
-    FirstName VARCHAR(20) NOT NULL,
-    LastName VARCHAR(30) NOT NULL,
-    SemesterNumber INT NOT NULL,
-    GroupName VARCHAR(50) NOT NULL,
-    FOREIGN KEY (GroupName) REFERENCES GroupName(Name)
-
-);
-
-CREATE TABLE Professor(
-    WorkerNumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    FirstName VARCHAR(20) NOT NULL,
-    LastName VARCHAR(30) NOT NULL
+    CountNumber  VARCHAR(20) PRIMARY KEY,
+    FirstName    VARCHAR(50) NOT NULL,
+    LastName     VARCHAR(50) NOT NULL,
+    GroupNameID  INT,
+    FOREIGN KEY (GroupNameID) REFERENCES GroupName(GroupNameID) ON UPDATE CASCADE
 );
 
 CREATE TABLE Signature (
-    Name VARCHAR(50) NOT NULL PRIMARY KEY,
-    ProfessorWN INT NOT NULL,
-    FOREIGN KEY (ProfessorWN) REFERENCES Professor(WorkerNumber)
-);
-
-CREATE TABLE Classroom(
-    Number INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    Type VARCHAR(30) NOT NULL,
-    Location VARCHAR(20) NOT NULL,
-    GroupName VARCHAR(50) NOT NULL,
-    FOREIGN KEY (GroupName) REFERENCES GroupName(Name)
+    SignatureID  INT AUTO_INCREMENT PRIMARY KEY,
+    Name         VARCHAR(100) NOT NULL UNIQUE,
+    WorkerNumber VARCHAR(20),
+    FOREIGN KEY (WorkerNumber) REFERENCES Professor(WorkerNumber) ON UPDATE CASCADE
 );
 
 CREATE TABLE Admin (
-    AdminID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    Username VARCHAR(50) NOT NULL UNIQUE,
-    Passphrase VARCHAR(50) NOT NULL
+    AdminID    INT AUTO_INCREMENT PRIMARY KEY,
+    Username   VARCHAR(50) NOT NULL UNIQUE,
+    Passphrase VARCHAR(255) NOT NULL
 );

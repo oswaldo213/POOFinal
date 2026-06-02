@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class profesores extends JFrame implements ActionListener {
 
-    protected Connection con;
+    protected static Connection con;
     protected String tabla = "Professor";
 
     protected JFrame anterior;
@@ -35,7 +35,6 @@ public class profesores extends JFrame implements ActionListener {
     public profesores(JFrame anterior) {
         this.anterior = anterior;
         Window();
-        popo();
     }
 
     public void Window() {
@@ -73,7 +72,7 @@ public class profesores extends JFrame implements ActionListener {
         c.add(panel_up, BorderLayout.CENTER);
         c.add(panel_down, BorderLayout.SOUTH);
 
-        setSize(500, 250);
+        setSize(700, 550);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -84,7 +83,7 @@ public class profesores extends JFrame implements ActionListener {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             String url =
-                "jdbc:mariadb://localhost:3306/Practica?user=oswaldo&password=1234";
+                "jdbc:mariadb://localhost:3306/Practica2?user=oswaldo&password=1234";
             con = DriverManager.getConnection(url);
         } catch (ClassNotFoundException e) {
             JOptionPane.showMessageDialog(null, "hey como que no hay driver");

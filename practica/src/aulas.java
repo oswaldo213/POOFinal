@@ -20,15 +20,15 @@ public class aulas extends profesores {
         txtLocation = new JTextField();
         lblNombre = new JLabel("Nombre de aula:");
         lblApellido = new JLabel("Type:");
-        lblNumero = new JLabel("Group Name:");
 
         super.Window();
+        panel_up.remove(lblNumero);
+        panel_up.remove(txtNumero);
 
         panel_up.add(lblLocation);
         panel_up.add(txtLocation);
 
         setTitle("Gestión de aulas");
-        setSize(500, 300);
         panel_up.revalidate();
         panel_up.repaint();
     }
@@ -48,12 +48,10 @@ public class aulas extends profesores {
                 return (
                     "INSERT INTO " +
                     tabla +
-                    " (Type, Location, GroupName, Name) VALUES ('" +
+                    " (Type, Location, Name) VALUES ('" +
                     txtApellido.getText() +
                     "','" +
                     txtLocation.getText() +
-                    "','" +
-                    txtNumero.getText() +
                     "','" +
                     txtNombre.getText() +
                     "')"
@@ -66,8 +64,6 @@ public class aulas extends profesores {
                     txtApellido.getText() +
                     "', Location = '" +
                     txtLocation.getText() +
-                    "', GroupName = '" +
-                    txtNumero.getText() +
                     "' WHERE Name = '" +
                     txtNombre.getText() +
                     "'"
@@ -98,7 +94,6 @@ public class aulas extends profesores {
                 txtNombre.setText(rs.getString("Name"));
                 txtApellido.setText(rs.getString("Type"));
                 txtLocation.setText(rs.getString("Location"));
-                txtNumero.setText(rs.getString("GroupName"));
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(
                     null,
