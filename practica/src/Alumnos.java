@@ -22,7 +22,7 @@ public class Alumnos extends profesores {
 
         txtSemester = new JTextField();
         txtGroupName = new JTextField();
-
+        lblNumero = new JLabel("Cuenta de alumno:");
         super.Window();
 
         panel_up.add(lblSemester);

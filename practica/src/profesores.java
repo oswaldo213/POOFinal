@@ -28,6 +28,10 @@ public class profesores extends JFrame implements ActionListener {
     protected JButton btnUpdate = new JButton("Actualizar");
     protected JButton btnQuery = new JButton("Consultar");
 
+    protected JLabel lblNombre = new JLabel("Nombre:");
+    protected JLabel lblApellido = new JLabel("Apellido:");
+    protected JLabel lblNumero = new JLabel("Número de trabajador:");
+
     public profesores(JFrame anterior) {
         this.anterior = anterior;
         Window();
@@ -45,10 +49,6 @@ public class profesores extends JFrame implements ActionListener {
 
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
         panel_up.setBorder(BorderFactory.createEmptyBorder(20, 40, 10, 40));
-
-        JLabel lblNombre = new JLabel("Nombre:");
-        JLabel lblApellido = new JLabel("Apellido:");
-        JLabel lblNumero = new JLabel("Número de trabajador:");
 
         panel_up.add(lblNombre);
         panel_up.add(txtNombre);

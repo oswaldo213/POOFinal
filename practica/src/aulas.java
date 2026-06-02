@@ -1,12 +1,11 @@
 import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 
 public class aulas extends profesores {
 
-    private JTextField txtType = new JTextField();
-    private JTextField txtLocation = new JTextField();
-    private JTextField txtGroupName = new JTextField();
+    private JTextField txtLocation;
 
     public aulas(JFrame anterior) {
         super(anterior);
@@ -15,21 +14,18 @@ public class aulas extends profesores {
     @Override
     public void Window() {
         panel_up.setLayout(new BoxLayout(panel_up, BoxLayout.Y_AXIS));
-        super.Window();
-
         panel_up.add(Box.createVerticalStrut(10));
 
-        JLabel lblType = new JLabel("Tipo de aula:");
-        panel_up.add(lblType);
-        panel_up.add(txtType);
-
         JLabel lblLocation = new JLabel("Ubicación:");
+        txtLocation = new JTextField();
+        lblNombre = new JLabel("Nombre de aula:");
+        lblApellido = new JLabel("Type:");
+        lblNumero = new JLabel("Group Name:");
+
+        super.Window();
+
         panel_up.add(lblLocation);
         panel_up.add(txtLocation);
-
-        JLabel lblGroupName = new JLabel("Grupo:");
-        panel_up.add(lblGroupName);
-        panel_up.add(txtGroupName);
 
         setTitle("Gestión de aulas");
         setSize(500, 300);
@@ -42,40 +38,76 @@ public class aulas extends profesores {
         switch (valor) {
             case 1:
                 return (
-                    "SELECT * FROM Classroom WHERE Number = '" +
-                    txtNumero.getText() +
+                    "SELECT * FROM " +
+                    tabla +
+                    " WHERE Name = '" +
+                    txtNombre.getText() +
                     "'"
                 );
             case 2:
                 return (
-                    "INSERT INTO Classroom (Type, Location, GroupName) VALUES ('" +
-                    txtType.getText() +
+                    "INSERT INTO " +
+                    tabla +
+                    " (Type, Location, GroupName, Name) VALUES ('" +
+                    txtApellido.getText() +
                     "','" +
                     txtLocation.getText() +
                     "','" +
-                    txtGroupName.getText() +
+                    txtNumero.getText() +
+                    "','" +
+                    txtNombre.getText() +
                     "')"
                 );
             case 3:
                 return (
-                    "UPDATE Classroom SET Type = '" +
-                    txtType.getText() +
+                    "UPDATE " +
+                    tabla +
+                    " SET Type = '" +
+                    txtApellido.getText() +
                     "', Location = '" +
                     txtLocation.getText() +
                     "', GroupName = '" +
-                    txtGroupName.getText() +
-                    "' WHERE Number = '" +
                     txtNumero.getText() +
+                    "' WHERE Name = '" +
+                    txtNombre.getText() +
                     "'"
                 );
             case 4:
                 return (
-                    "DELETE FROM Classroom WHERE Number = '" +
-                    txtNumero.getText() +
+                    "DELETE FROM " +
+                    tabla +
+                    " WHERE Name = '" +
+                    txtNombre.getText() +
                     "'"
                 );
             default:
                 return "";
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.tabla = "Classroom";
+
+        if (e.getSource() == btnQuery) {
+            String query = MakeQuery(1);
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                rs.next();
+                txtNombre.setText(rs.getString("Name"));
+                txtApellido.setText(rs.getString("Type"));
+                txtLocation.setText(rs.getString("Location"));
+                txtNumero.setText(rs.getString("GroupName"));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error al consultar datos: " + ex.getMessage()
+                );
+            }
+            return;
+        }
+
+        super.actionPerformed(e);
     }
 }
