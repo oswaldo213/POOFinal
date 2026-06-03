@@ -55,12 +55,24 @@ public class materias extends profesores {
                     "'))"
                 );
             case 3:
+                String profesorInput = txt3Field.getText().trim();
+                if (
+                    profesorInput.equals("Sin profesor asignado") ||
+                    profesorInput.isEmpty()
+                ) {
+                    return (
+                        "UPDATE " +
+                        tabla +
+                        " SET WorkerNumber = NULL WHERE Name = '" +
+                        txt1Field.getText() +
+                        "'"
+                    );
+                }
                 return (
                     "UPDATE " +
                     tabla +
-                    " SET WorkerNumber = " +
-                    "(SELECT WorkerNumber FROM Professor WHERE CONCAT(FirstName, ' ', LastName) = '" +
-                    txt3Field.getText() +
+                    " SET WorkerNumber = (SELECT WorkerNumber FROM Professor WHERE CONCAT(FirstName, ' ', LastName) = '" +
+                    profesorInput +
                     "') " +
                     "WHERE Name = '" +
                     txt1Field.getText() +

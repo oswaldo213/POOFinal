@@ -13,23 +13,12 @@ public class profesores extends ABC_Base {
         tabla = "Professor";
     }
 
-    public void popo() {
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            String url =
-                "jdbc:mariadb://localhost:3306/Practica2?user=oswaldo&password=1234";
-            con = DriverManager.getConnection(url);
-        } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "hey como que no hay driver");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "jsjjs no te jalo wey");
-        }
-    }
 
     public String MakeQuery(int valor) {
         switch (valor) {
             case 1:
-                return "SELECT * FROM " + tabla;
+                return "SELECT * FROM " + tabla + " WHERE WorkerNumber = '" + txt3Field.getText()  + "'";
+
             case 2:
                 return (
                     "INSERT INTO " +
