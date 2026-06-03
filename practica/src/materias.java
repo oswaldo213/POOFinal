@@ -1,7 +1,7 @@
 import java.sql.*;
 import javax.swing.*;
 
-public class materias extends profesores {
+public class materias extends ABC_Base {
 
     public materias(JFrame anterior) {
         super(anterior);

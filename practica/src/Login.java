@@ -61,19 +61,6 @@ public class Login extends JFrame implements ActionListener {
         setTitle("Inicio de Sesión");
     }
 
-    public void popo() {
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            String url =
-                "jdbc:mariadb://localhost:3306/Practica2?user=oswaldo&password=1234";
-            profesores.con = DriverManager.getConnection(url);
-        } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "hey como que no hay driver");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "jsjjs no te jalo wey");
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit) {
@@ -92,7 +79,7 @@ public class Login extends JFrame implements ActionListener {
                     password +
                     "'";
 
-                Statement stmt = profesores.con.createStatement();
+                Statement stmt = ABC_Base.con.createStatement();
                 ResultSet res = stmt.executeQuery(query);
 
                 if (res.next()) {
