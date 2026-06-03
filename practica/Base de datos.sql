@@ -7,10 +7,12 @@ CREATE TABLE Classroom (
 
 CREATE TABLE GroupName (
     GroupNameID INT AUTO_INCREMENT PRIMARY KEY,
-    Name        VARCHAR(50) UNIQUE NOT NULL,
+    Name        VARCHAR(50) NOT NULL UNIQUE,
     Semester    INT NOT NULL,
-    ClassroomID INT NOT NULL,
-    FOREIGN KEY (ClassroomID) REFERENCES Classroom(ClassroomID) ON UPDATE CASCADE
+    ClassroomID INT NULL,
+    FOREIGN KEY (ClassroomID) REFERENCES Classroom(ClassroomID)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 );
 
 CREATE TABLE Professor (
@@ -24,14 +26,17 @@ CREATE TABLE Students (
     FirstName    VARCHAR(50) NOT NULL,
     LastName     VARCHAR(50) NOT NULL,
     GroupNameID  INT NOT NULL,
-    FOREIGN KEY (GroupNameID) REFERENCES GroupName(GroupNameID) ON UPDATE CASCADE
+    FOREIGN KEY (GroupNameID) REFERENCES GroupName(GroupNameID)
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE Signature (
     SignatureID  INT AUTO_INCREMENT PRIMARY KEY,
     Name         VARCHAR(100) NOT NULL UNIQUE,
-    WorkerNumber VARCHAR(20) NOT NULL,
-    FOREIGN KEY (WorkerNumber) REFERENCES Professor(WorkerNumber) ON UPDATE CASCADE
+    WorkerNumber VARCHAR(20) NULL,
+    FOREIGN KEY (WorkerNumber) REFERENCES Professor(WorkerNumber)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 );
 
 CREATE TABLE Admin (
